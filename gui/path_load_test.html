@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#update_path_table").click(function() {
+        update_path_table();
+    });
+    var history_count = 0;
+
+    function update_path_table() {
+        url = "http://127.0.0.1:8080/traffic/routing/path_load_test";
+        $.getJSON(url, function(table) {
+            // var text = "<table border='1'><tr><td>path_id</td><td>src</td><td>dst</td><td>path</td><td>load(Mbps)</td>";
+            var text = "<table border='1'><tr><td>path_id</td><td>load(Mbps)</td>";
+            var avg_load = 0.0;
+            var count = 0;
+            $.each(table, function(path_id, load) {
+                text += "<tr>";
+                text += "<td>" + path_id + "</td>";
+                text += "<td>" + load + "</td>";
+                text += "</tr>";
+                avg_load += parseFloat(load);
+                count += 1;
+            });
+            text += "</table>";
+            $("#path_table").html(text);
+            avg_load = avg_load / count;
+            // $("#history").append(table[1] + ", " + table[2] + ", " + table[3] + ", " + avg_load.toString() + "</br>");
+            $("#history").append(table[1] + ",    " + table[2] + ",    " + table[3] + "</br>");
+            history_count += 1;
+            $("#count").html("History Count: " + history_count.toString());
+        });
+    }
+
+    setInterval(update_path_table, 3000);
+});
+</script>
+</head>
+<body>
+<div>
+    <h2>Path Table</h2>
+    <div id="path_table"></div>
+    <button id="update_path_table">Get Path Table</button></br>
+    <div id="count"></div>
+    <div id="history"></div>
+</div>
+</body>
+</html>

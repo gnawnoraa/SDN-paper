@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#update_link_load").click(function() {
+        update_link_load();
+    });
+    var history_count = 0;
+
+    function update_link_load() {
+        url = "http://127.0.0.1:8080/traffic/routing/congestion_control_state";
+        $.getJSON(url, function(loading) {
+            // var tbl  = document.createElement("table");
+            var text = "<table border='1'><tr><td>dpid</td><td>port</td><td>state</td>";
+            $.each(loading, function(dpid, load) {
+                text += "<tr>";
+                text += "<td rowspan='" + (Object.keys(load).length+1) + "'>";
+                text += dpid + "</td>";
+                $.each(load, function(port, value) {
+                    // text += "</tr><tr><td rowspan='" + Object.keys(value).length + "'>" + port + "</td>";
+                    text += "</tr><tr><td>" + port + "</td>";
+                    text += "<td>";
+                    $.each(value, function(label, flow) {
+                        text += classification(label) + ": " + flow + "</br>";
+                    });
+                    text += "</td>";
+                    count += 1;
+                });
+                text += "</tr>";
+            });
+            text += "</table>";
+            $("#link_table").html(text);
+
+            // avg_load = avg_load / count;
+            // $("#history").append(avg_load.toString() + "</br>");
+            // history_count += 1;
+            // $("#count").html("History Count: " + history_count.toString());
+            // $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        });
+    }
+
+    function classification(label) {
+        switch (label) {
+            case "0":
+                return "Data Mice Flow    "
+                break;
+            case "1":
+                return "Data Elephant Flow"
+                break;
+            case "2":
+                return "QoS Low Priority  "
+                break;
+            case "3":
+                return "QoS High Priority "
+                break;
+        }
+    }
+    setInterval(update_link_load, 3000);
+});
+</script>
+</head>
+<body>
+<div>
+	<h2>Congestion Control State</h2>
+	<div id="link_table"></div>
+	<button id="update_link_load">Get Link Load</button></br>
+	<div id="count"></div>
+	<div id="history"></div>
+</div>
+</body>
+</html>

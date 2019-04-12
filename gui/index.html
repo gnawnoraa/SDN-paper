@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="./gui/ryu.topology.css">
+<script src="./js/d3.v3.min.js" charset="utf-8"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+<script src="./js/jquery.min.js"></script>
+</head>
+<body>
+<h1>Ryu Topology Viewer</h1>
+<script src="./gui/ryu.topology.js" charset="utf-8"></script>
+
+<div>
+	<h2>Setting Congestion Control</h2>
+	<input id="check_data_control" type="checkbox" checked>Enable Congestion Control
+	<div id="is_data_control"></div>
+</div>
+
+<div>
+	<div id="div1"><h2>Administrator Policy</h2></div>
+	QoS: <input type="text" id="qos_rule" value="0.5">
+	Data: <input type="text" id="data_rule" value="0.5">
+	<button id="rule_button">Setting</button>
+</div>
+<div>
+    <h2>QoS High Priority Rule</h2>
+	src: <input type="text" id="src" value="00:00:00:00:00:01"></br>
+	dst: <input type="text" id="dst" value="00:00:00:00:00:04"></br>
+	proto: <input type="text" id="proto" value="UDP"></br>
+	port_no: <input type="text" id="port_no" value="5001"></br>
+	rate: <input type="text" id="rate" value="20"></br>
+	<button id="qos_rule_add">Add</button><div id="qos_result"></div></br>
+	<div id="qos_table"></div>
+	<button id="update_qos_table">Get QoS Table</button>
+</div>
+<div>
+	<h2>Link Load</h2>
+	<div id="link_table"></div>
+	<button id="update_link_load">Get Link Load</button></br>
+	<div id="count"></div>
+	<div id="history"></div>
+</div>
+<div>
+	<h2>Path Table</h2>
+	<div id="path_table"></div>
+	<button id="update_path_table">Get Path Table</button>
+</div>
+<div>
+	<h2>Flow Loading Table</h2>
+	<div id="loading"></div>
+	<button id="flow_button">Get Flow Loading</button>
+</div>
+<script src="./js/rule.js"></script>
+</body>
+</html>

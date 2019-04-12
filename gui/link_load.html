@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#update_link_load").click(function() {
+        update_link_load();
+    });
+    var history_count = 0;
+
+    function update_link_load() {
+        url = "http://" + location.host + "/traffic/routing/link_loading";
+        $.getJSON(url, function(loading) {
+	        var avg_load = 0.0
+	        var count = 0
+            // var tbl  = document.createElement("table");
+            var text = "<table border='1'><tr><td>dpid</td><td>port</td><td>link_load(Mb/s)</td>";
+            $.each(loading, function(dpid, load) {
+                text += "<tr>";
+                text += "<td rowspan='" + (Object.keys(load).length+1) + "'>";
+                text += dpid + "</td>";
+                $.each(load, function(port, value) {
+                    // text += "</tr><tr><td rowspan='" + Object.keys(value).length + "'>" + port + "</td>";
+                    text += "</tr><tr><td>" + port + "</td>";
+                    text += "<td>" + value + "</td>";
+                    avg_load += parseFloat(value);
+                    count += 1;
+                });
+                text += "</tr>";
+            });
+            text += "</table>";
+            $("#link_table").html(text);
+
+            avg_load = avg_load / count;
+            $("#history").append(avg_load.toString() + "</br>");
+            history_count += 1;
+            $("#count").html("History Count: " + history_count.toString());
+            // $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        });
+    }
+    setInterval(update_link_load, 3000);
+});
+</script>
+</head>
+<body>
+<div>
+	<h2>Link Load</h2>
+	<div id="link_table"></div>
+	<button id="update_link_load">Get Link Load</button></br>
+	<div id="count"></div>
+	<div id="history"></div>
+</div>
+</body>
+</html>
